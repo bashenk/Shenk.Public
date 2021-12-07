@@ -4,6 +4,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = " Solution Items", "Solution
 	ProjectSection(SolutionItems) = preProject
 		Directory.runsettings = ..\Directory.runsettings
 		.editorconfig = ..\.editorconfig
+		.gitignore = .\.gitignore
 		Common.targets = ..\Common.targets
 		DefineConstants.props = ..\DefineConstants.props
 		DefineFrameworkVersions.props = ..\DefineFrameworkVersions.props

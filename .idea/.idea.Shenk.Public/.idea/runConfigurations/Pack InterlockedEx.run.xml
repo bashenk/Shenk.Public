@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Pack InterlockedEx" type="RunNativeExe" factoryName="Native Executable">
+    <option name="EXE_PATH" value="/Windows/System32/WindowsPowerShell/v1.0/powershell.exe" />
+    <option name="PROGRAM_PARAMETERS" value="-noprofile -Command &quot;&amp;{$dir=&quot;&quot;&quot;&quot;$env:pdir&quot;&quot;&quot;&quot;;@(&quot;&quot;&quot;&quot;$env:project&quot;&quot;&quot;&quot;)|%{$proj=&quot;&quot;&quot;&quot;$_&quot;&quot;&quot;&quot;;Get-ChildItem &quot;&quot;&quot;&quot;$dir\$proj&quot;&quot;&quot;&quot; -Recurse -Force -Directory|? Name -in 'obj','bin'|Remove-Item -Force -Recurse;dotnet restore --no-cache --force-evaluate &quot;&quot;&quot;&quot;$dir\$proj&quot;&quot;&quot;&quot;;@('Any CPU')|%{dotnet build --no-restore --no-incremental -c Release /p:Platform=&quot;&quot;&quot;&quot;$_&quot;&quot;&quot;&quot; &quot;&quot;&quot;&quot;$dir\$proj&quot;&quot;&quot;&quot;;};if ($? -eq $true){dotnet pack --no-build -c Release &quot;&quot;&quot;&quot;$dir\$proj&quot;&quot;&quot;&quot;;};}}&quot;" />
+    <option name="WORKING_DIRECTORY" value="/Windows/System32/WindowsPowerShell/v1.0" />
+    <option name="PASS_PARENT_ENVS" value="1" />
+    <envs>
+      <env name="pdir" value="C:\Projects\RiderProjects\Shenk\Shenk.Public" />
+      <env name="project" value="Shenk.InterlockedEx" />
+    </envs>
+    <option name="USE_EXTERNAL_CONSOLE" value="0" />
+    <method v="2" />
+  </configuration>
+</component>
