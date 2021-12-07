@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<ApplicationRevision Condition=" '$(ApplicationRevision)' == '' ">0</ApplicationRevision>
+		<AssemblyVersion Condition=" '$(AssemblyVersion)' == '' ">$(Version)</AssemblyVersion> <!-- Assembly Version -->
+		<FileVersion Condition=" '$(FileVersion)' == '' ">$(AssemblyVersion)</FileVersion>  <!-- Assembly File Version -->
+	</PropertyGroup>
+
+	<Target Name="ShowReservedProperties" AfterTargets="AfterBuild">
+		<Message Text=" MSBuildProjectDirectory  = $(MSBuildProjectDirectory)" Importance="high" />
+		<Message Text=" MSBuildProjectFile  = $(MSBuildProjectFile)" Importance="high" />
+		<Message Text=" MSBuildProjectExtension  = $(MSBuildProjectExtension)" Importance="high" />
+		<Message Text=" MSBuildProjectFullPath  = $(MSBuildProjectFullPath)" Importance="high" />
+		<Message Text=" MSBuildProjectName  = $(MSBuildProjectName)" Importance="high" />
+		<Message Text=" MSBuildBinPath  = $(MSBuildBinPath)" Importance="high" />
+		<Message Text=" MSBuildProjectDefaultTargets  = $(MSBuildProjectDefaultTargets)" Importance="high" />
+		<Message Text=" MSBuildExtensionsPath  = $(MSBuildExtensionsPath)" Importance="high" />
+		<Message Text=" MSBuildStartupDirectory  = $(MSBuildStartupDirectory)" Importance="high"/>
+	</Target>
+
+	<!--    <Target Name="ConfigPack" BeforeTargets="Build" Condition=" !$(OutputType.EndsWith('Exe')) ">-->
+	<Target Name="ConfigPack" BeforeTargets="BeforeBuild">
+		<Message Text="------------ Began MSBuild target 'ConfigPack' for target $(TargetFramework)|$(Configuration)|$(Platform) --------------------" Importance="high" />
+		<PropertyGroup>
+			<DebugSymbols>true</DebugSymbols>
+			<DebugType>full</DebugType>
+			<EmbedAllSources>true</EmbedAllSources>
+			<IncludeSymbols>true</IncludeSymbols>
+
+			<Optimize>false</Optimize>
+			<IncludeContentInPack>true</IncludeContentInPack>
+			<IncludeContentFilesProjectOutputGroup>true</IncludeContentFilesProjectOutputGroup>
+			<IncludeDebugSymbolsProjectOutputGroup>true</IncludeDebugSymbolsProjectOutputGroup>
+			<IncludeSourceFilesProjectOutputGroup>true</IncludeSourceFilesProjectOutputGroup>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="CopyPackage" AfterTargets="Pack;PackTask" Condition="Exists($(LocalNuGetArchiveFolder))">
+		<Message Text="Finding files like $(MSBuildProjectDirectory)\$(OutputPath)$(PackageId).$(PackageVersion)*.nupkg" Importance="low" />
+		<ItemGroup>
+			<FilesToCopy Include="$(MSBuildProjectDirectory)\$(OutputPath)$(PackageId).$(PackageVersion)*.nupkg"/>
+		</ItemGroup>
+		<Copy SourceFiles="@(FilesToCopy)" DestinationFolder="$(LocalNuGetArchiveFolder)" />
+		<Message Text="Copied @(FilesToCopy) to $(LocalNuGetArchiveFolder)" Importance="high" />
+	</Target>
+
+	<!--    	<Import Project="./DefineConstants.props" />-->
+</Project>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<ParentModuleName Condition=" $(MSBuildProjectName.Contains('.')) ">$(MSBuildProjectName.Substring(0,$(MSBuildProjectName.LastIndexOf('.'))))</ParentModuleName>
+		<ProjectName Condition=" $(MSBuildProjectName.Contains('.')) ">$(MSBuildProjectName.Substring($([MSBuild]::Add($(MSBuildProjectName.IndexOf('.')), 1))))</ProjectName>
+		<ProjectName Condition=" '$(ProjectName)' == '' ">$(MSBuildProjectName)</ProjectName>
+		<RootModuleName Condition=" $(MSBuildProjectName.Contains('.')) ">$(MSBuildProjectName.Substring(0,$(MSBuildProjectName.IndexOf('.'))))</RootModuleName>
+		<Version Condition=" '$(Version)' == '' ">1.0.0</Version> <!-- Assembly Version -->
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<AppDesignerFolder>Properties</AppDesignerFolder>
+		<AssemblyName Condition=" $(AssemblyName) == '' And '$(ModuleName)' != '' ">$(RootModuleName).$(ModuleName)</AssemblyName>
+		<Authors Condition=" '$(Authors)' == '' ">Brian A. Shenk</Authors>
+		<Company Condition=" '$(Company)' == '' ">Brian A. Shenk</Company>
+		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+		<Copyright Condition=" '$(Copyright)' == '' ">© $([System.DateTime]::Now.Year) Brian A. Shenk</Copyright>
+		<DefaultLanguage Condition=" '$(DefaultLanguage)' == '' ">en-US</DefaultLanguage>
+		<FileAlignment>512</FileAlignment>
+		<LangVersion>latest</LangVersion>
+		<NeutralLanguage Condition=" '$(NeutralLanguage)' == '' ">en-US</NeutralLanguage>
+		<Nullable>enable</Nullable>
+		<NullableReferenceTypes>true</NullableReferenceTypes>
+		<NullableContextOptions>enable</NullableContextOptions>
+		<OutDir Condition=" '$(OutDir)' == '' ">$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFramework)\</OutDir>
+		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+		<PlatformTarget Condition=" '$(PlatformTarget)' == '' ">AnyCPU</PlatformTarget>
+		<Platforms Condition=" '$(Platforms)' == '' ">AnyCPU</Platforms>
+		<SignAssembly>false</SignAssembly>
+
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisMode>Default</AnalysisMode>
+
+		<WarningsAsErrors>nullable</WarningsAsErrors>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<InvariantGlobalization>true</InvariantGlobalization>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<ModuleName Condition=" $(ProjectName.Contains('.')) ">$(ProjectName.Substring(0, $(ProjectName.LastIndexOf('.'))))</ModuleName>
+		<ModuleName Condition=" '$(ModuleName)' == '' ">$(ProjectName)</ModuleName>
+		<PackageId Condition=" '$(PackageId)' == '' ">$(AssemblyName)</PackageId>
+		<Product Condition=" '$(Product)' == '' And '$(AssemblyName)' != '' And '$(TargetFramework)' != '' ">$(AssemblyName) ($(TargetFramework))</Product>
+		<Title Condition=" '$(Title)' == '' ">$(AssemblyName.Replace("."," "))</Title>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<DefineConstants></DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<Optimize>false</Optimize>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>none</DebugType>
+		<DefineConstants></DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<Optimize>true</Optimize>
+		<!--		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+		<WarningLevel>3</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Experimental' ">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<DefineConstants>DEBUG;TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<WarningLevel>4</WarningLevel>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'QA' ">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<DefineConstants>TRACE</DefineConstants>
+		<ErrorReport>prompt</ErrorReport>
+		<Optimize>true</Optimize>
+		<!--		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>-->
+		<WarningLevel>3</WarningLevel>
+	</PropertyGroup>
+
+	<Choose>
+		<When Condition=" '$(RootModuleName)' != '' And '$(ProjectName)' != ''  ">
+			<Choose>
+				<When Condition=" $(MSBuildProjectName.Contains('Tests')) ">
+					<PropertyGroup>
+						<DefineConstants>$(DefineConstants);TEST</DefineConstants>
+						<IsPackable>false</IsPackable>
+						<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+						<RootNamespace>$(RootModuleName).Tests</RootNamespace>
+					</PropertyGroup>
+				</When>
+				<When Condition=" $(MSBuildProjectName.Contains('Benchmark')) ">
+					<PropertyGroup>
+						<DefineConstants>$(DefineConstants);BENCHMARK</DefineConstants>
+						<IsPackable>false</IsPackable>
+						<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+						<RootNamespace>$(RootModuleName).$(ProjectName)</RootNamespace>
+					</PropertyGroup>
+				</When>
+				<Otherwise>
+					<PropertyGroup>
+						<IsPackable>true</IsPackable>
+						<RootNamespace Condition=" '$(RootNamespace)' == '' ">$(RootModuleName).$(ProjectName)</RootNamespace>
+					</PropertyGroup>
+				</Otherwise>
+			</Choose>
+		</When>
+	</Choose>
+
+	<Choose>
+		<When Condition=" $(OutputType.EndsWith('Exe')) ">
+			<PropertyGroup>
+				<RuntimeIdentifiers>win-x86;win-x64</RuntimeIdentifiers>
+			</PropertyGroup>
+		</When>
+	</Choose>
+	<Choose>
+		<When Condition=" '$(IsPackable)' == 'true' ">
+			<!-- NuGet/NuSpec Configuration -->
+			<PropertyGroup>
+				<LocalNuGetArchiveFolder>F:\NuGet\</LocalNuGetArchiveFolder>
+				<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+			</PropertyGroup>
+		</When>
+	</Choose>
+
+	<PropertyGroup Condition=" $(TargetFramework.StartsWith('netstandard')) Or '$(TargetFrameworkIdentifier)'=='.NETStandard' ">
+		<_ShortFrameworkIdentifier>$(TargetFramework.TrimEnd('.0123456789'))</_ShortFrameworkIdentifier>
+		<NetStdVer>$([System.Version]::new($(TargetFramework.Substring($(_ShortFrameworkIdentifier.Length)))))</NetStdVer>
+	</PropertyGroup>
+
+</Project>
